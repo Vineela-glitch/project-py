@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Compare illustrative crop profitability across Indian states.">
+  <title>Crop Profit Analyzer | Agricultural Crop Production Analysis System</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js" defer></script>
+  <script src="{{ url_for('static', filename='js/script.js') }}" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <nav class="nav container" aria-label="Main navigation">
+      <a class="brand" href="{{ url_for('home') }}" aria-label="CropWise home">
+        <span class="brand-mark" aria-hidden="true">✳</span>
+        <span>CropWise<span class="brand-dot">.</span></span>
+      </a>
+      <div class="nav-links">
+        <a class="nav-link active" href="{{ url_for('home') }}">Analyzer</a>
+        <a class="nav-link" href="{{ url_for('about') }}">About project</a>
+      </div>
+      <span class="nav-tag"><span class="status-dot"></span> Student project</span>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero container">
+      <div class="hero-copy">
+        <p class="eyebrow"><span class="eyebrow-line"></span> AGRICULTURE · DATA · INSIGHT</p>
+        <h1>Find the crop’s<br>brightest <span>opportunity.</span></h1>
+        <p class="hero-description">
+          Compare estimated crop profitability across Indian states. Choose a crop to see
+          a ranked, transparent breakdown of sample yields, prices, costs and returns.
+        </p>
+        <div class="hero-note">
+          <span class="note-icon" aria-hidden="true">i</span>
+          <span>Educational demo using <strong>illustrative sample data</strong>, not official statistics.</span>
+        </div>
+      </div>
+      <div class="hero-art" aria-hidden="true">
+        <div class="sun"></div>
+        <div class="field field-back"></div>
+        <div class="field field-middle"></div>
+        <div class="field field-front"></div>
+        <div class="plant plant-one"><i></i><b></b></div>
+        <div class="plant plant-two"><i></i><b></b></div>
+        <div class="plant plant-three"><i></i><b></b></div>
+        <div class="art-caption"><span class="caption-dot"></span> Data-led decisions start here</div>
+      </div>
+    </section>
+
+    <section class="analysis-section container" id="analyzer">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">THE ANALYZER</p>
+          <h2>Explore crop profitability</h2>
+        </div>
+        <span class="section-index">01 <span>/</span> 02</span>
+      </div>
+
+      <div class="analyzer-card">
+        <div class="analyzer-card-top">
+          <div class="step-number">01</div>
+          <div>
+            <h3>Choose your crop</h3>
+            <p>We’ll compare the estimated return per hectare across the states in our sample dataset.</p>
+          </div>
+        </div>
+        <form id="analysis-form" class="analysis-form">
+          <label for="crop-select">Crop to analyze</label>
+          <div class="form-controls">
+            <div class="select-wrap">
+              <span class="select-icon" aria-hidden="true">⌄</span>
+              <select id="crop-select" name="crop" required {% if not crops %}disabled{% endif %}>
+                <option value="" selected disabled>Select a crop</option>
+                {% for crop in crops %}
+                <option value="{{ crop }}">{{ crop }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <button type="submit" class="button button-primary" id="analyze-button" {% if not crops %}disabled{% endif %}>
+              <span>Analyze profit</span><span class="button-arrow" aria-hidden="true">↗</span>
+            </button>
+          </div>
+          {% if data_error %}
+          <p class="form-error" role="alert">Dataset error: {{ data_error }}</p>
+          {% endif %}
+          <p class="form-hint">All results are estimates based on the provided sample figures.</p>
+        </form>
+      </div>
+
+      <div id="error-message" class="error-banner" role="alert" hidden></div>
+      <section id="results" class="results" aria-live="polite" hidden>
+        <div class="result-heading">
+          <div>
+            <p class="eyebrow">YOUR RESULTS</p>
+            <h2><span id="result-crop"></span> across states</h2>
+          </div>
+          <button type="button" class="button button-secondary" id="another-crop">↺ <span>Analyze another crop</span></button>
+        </div>
+
+        <div class="winner-card">
+          <div class="winner-copy">
+            <span class="winner-label"><span aria-hidden="true">✦</span> HIGHEST ESTIMATED PROFIT</span>
+            <h3 id="winner-state"></h3>
+            <p>Highest estimated profit in this sample comparison</p>
+          </div>
+          <div class="winner-value">
+            <span>Estimated profit / hectare</span>
+            <strong id="winner-profit"></strong>
+          </div>
+          <div class="winner-decoration" aria-hidden="true">01</div>
+        </div>
+
+        <div class="metrics-grid">
+          <article class="metric-card">
+            <span class="metric-label">ESTIMATED REVENUE</span>
+            <strong id="winner-revenue">—</strong>
+            <span class="metric-foot">per hectare · winning state</span>
+          </article>
+          <article class="metric-card">
+            <span class="metric-label">CULTIVATION COST</span>
+            <strong id="winner-cost">—</strong>
+            <span class="metric-foot">per hectare · winning state</span>
+          </article>
+          <article class="metric-card">
+            <span class="metric-label">STATES COMPARED</span>
+            <strong id="state-count">—</strong>
+            <span class="metric-foot">in this sample dataset</span>
+          </article>
+        </div>
+
+        <div class="data-disclaimer">
+          <span class="disclaimer-icon" aria-hidden="true">!</span>
+          <p><strong>Sample data, not a forecast.</strong> <span id="data-note"></span> Actual profits vary with market prices, weather, irrigation and farm-specific expenses.</p>
+        </div>
+
+        <section class="content-card chart-card" aria-labelledby="chart-title">
+          <div class="card-heading">
+            <div>
+              <p class="eyebrow">STATE COMPARISON</p>
+              <h3 id="chart-title">Estimated profit per hectare</h3>
+            </div>
+            <span class="chart-unit">INR / hectare</span>
+          </div>
+          <div class="chart-wrap">
+            <canvas id="profit-chart" role="img" aria-label="Bar chart comparing estimated profit per hectare by state"></canvas>
+          </div>
+        </section>
+
+        <section class="content-card table-card" aria-labelledby="table-title">
+          <div class="card-heading table-heading">
+            <div>
+              <p class="eyebrow">FULL BREAKDOWN</p>
+              <h3 id="table-title">State-wise comparison</h3>
+            </div>
+            <label class="search-wrap" for="state-search">
+              <span aria-hidden="true">⌕</span>
+              <input id="state-search" type="search" placeholder="Filter states..." autocomplete="off">
+            </label>
+          </div>
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col">Rank</th>
+                  <th scope="col">State</th>
+                  <th scope="col">Crop</th>
+                  <th scope="col">Yield<br><span>tonnes / ha</span></th>
+                  <th scope="col">Selling price<br><span>INR / tonne</span></th>
+                  <th scope="col">Cultivation cost<br><span>INR / ha</span></th>
+                  <th scope="col">Est. revenue<br><span>INR / ha</span></th>
+                  <th scope="col">Est. profit<br><span>INR / ha</span></th>
+                </tr>
+              </thead>
+              <tbody id="results-body"></tbody>
+            </table>
+            <p id="no-matches" class="no-matches" hidden>No states match your search.</p>
+          </div>
+        </section>
+        <p class="source-note">Dataset year: <span id="dataset-year"></span> · Source: <span id="dataset-source"></span></p>
+      </section>
+    </section>
+
+    <section class="formula-section">
+      <div class="container formula-inner">
+        <div>
+          <p class="eyebrow">HOW WE CALCULATE</p>
+          <h2>Clear inputs.<br><span>Simple math.</span></h2>
+          <p>Every estimate follows the same transparent formula—so it’s easy to understand and explain.</p>
+        </div>
+        <div class="formula-steps">
+          <div class="formula-step"><span>01</span><div><h3>Estimated revenue / hectare</h3><p>Expected yield per hectare × selling price per unit</p></div></div>
+          <div class="formula-operator">−</div>
+          <div class="formula-step"><span>02</span><div><h3>Estimated cultivation cost / hectare</h3><p>Sample expense estimate for growing the crop</p></div></div>
+          <div class="formula-divider"></div>
+          <div class="formula-step formula-answer"><span>↳</span><div><h3>Estimated profit / hectare</h3><p>Estimated revenue − cultivation cost</p></div></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <a class="brand footer-brand" href="{{ url_for('home') }}"><span class="brand-mark" aria-hidden="true">✳</span><span>CropWise<span class="brand-dot">.</span></span></a>
+      <p>A student project for exploring agricultural data.</p>
+      <a href="{{ url_for('about') }}">About this project ↗</a>
+    </div>
+  </footer>
+</body>
+</html>

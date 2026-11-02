@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Page not found | CropWise</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <main class="not-found container">
+    <p class="eyebrow">404 · PAGE NOT FOUND</p>
+    <h1>This path has<br><span>no harvest.</span></h1>
+    <p>We couldn’t find the page you were looking for.</p>
+    <a class="button button-primary" href="{{ url_for('home') }}">Return to analyzer ↗</a>
+  </main>
+</body>
+</html>

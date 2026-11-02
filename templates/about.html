@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Learn about the Agricultural Crop Production Analysis System.">
+  <title>About the project | CropWise</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <header class="site-header">
+    <nav class="nav container" aria-label="Main navigation">
+      <a class="brand" href="{{ url_for('home') }}" aria-label="CropWise home"><span class="brand-mark" aria-hidden="true">✳</span><span>CropWise<span class="brand-dot">.</span></span></a>
+      <div class="nav-links"><a class="nav-link" href="{{ url_for('home') }}">Analyzer</a><a class="nav-link active" href="{{ url_for('about') }}">About project</a></div>
+      <span class="nav-tag"><span class="status-dot"></span> Student project</span>
+    </nav>
+  </header>
+  <main class="about-main container">
+    <p class="eyebrow"><span class="eyebrow-line"></span> ABOUT THE PROJECT</p>
+    <h1>A clearer way to<br>compare <span>crop returns.</span></h1>
+    <p class="about-lead">The Agricultural Crop Production Analysis System is a learning project that demonstrates how data analysis can help compare estimated crop profitability across Indian states.</p>
+
+    <div class="about-grid">
+      <section class="about-card about-card-main">
+        <span class="about-number">01 / PURPOSE</span>
+        <h2>Make a comparison easier to understand.</h2>
+        <p>A farmer, student or researcher can choose a crop and see how a set of sample figures for yield, selling price and cultivation cost combine into estimated revenue and profit. Results are ranked and displayed in both a chart and a table.</p>
+      </section>
+      <section class="about-card">
+        <span class="about-number">02 / TECHNOLOGY</span>
+        <h2>Built with approachable tools.</h2>
+        <ul class="tech-list">
+          <li><span>Frontend</span><strong>HTML, CSS, JavaScript</strong></li>
+          <li><span>Backend</span><strong>Python and Flask</strong></li>
+          <li><span>Analysis</span><strong>Pandas</strong></li>
+          <li><span>Visualization</span><strong>Chart.js</strong></li>
+          <li><span>Dataset</span><strong>CSV</strong></li>
+        </ul>
+      </section>
+      <section class="about-card">
+        <span class="about-number">03 / METHODOLOGY</span>
+        <h2>One transparent estimate.</h2>
+        <p><strong>Revenue per hectare</strong> = expected yield per hectare × selling price per unit.</p>
+        <p><strong>Profit per hectare</strong> = estimated revenue per hectare − cultivation cost per hectare.</p>
+        <p>The figures in this project are intentionally illustrative so the workflow can be demonstrated without presenting invented values as real statistics.</p>
+      </section>
+      <section class="about-card caution-card">
+        <span class="about-number">04 / DATA & LIMITATIONS</span>
+        <h2>Important: demo data only.</h2>
+        <p>The included CSV contains manually created sample values. It is not sourced from an official agricultural or market dataset, does not represent a verified year, and must not be used for farming, investment or policy decisions.</p>
+        <p>Real-world profit varies with location, crop variety, season, market prices, weather, irrigation and farm-specific expenses. A production-ready system should replace the sample with verified, dated data from authoritative sources and explain their methodology.</p>
+      </section>
+    </div>
+    <a class="button button-primary about-cta" href="{{ url_for('home') }}">Go to the analyzer <span class="button-arrow" aria-hidden="true">↗</span></a>
+  </main>
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <a class="brand footer-brand" href="{{ url_for('home') }}"><span class="brand-mark" aria-hidden="true">✳</span><span>CropWise<span class="brand-dot">.</span></span></a>
+      <p>A student project for exploring agricultural data.</p>
+      <a href="{{ url_for('home') }}">Back to analyzer ↗</a>
+    </div>
+  </footer>
+</body>
+</html>
